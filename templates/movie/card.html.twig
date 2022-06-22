@@ -18,11 +18,11 @@
     </div>
 </div>
 
-<div class="modal fade" id="movie-{{ movie.id }}-details" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
+<div class="movie modal fade" id="movie-{{ movie.id }}-details" data-movie-id="{{ movie.id }}" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-body">
-                <strong>Video</strong>
+                {% include 'videos/html5_player.html.twig' %}
                 <p>Film: {{ movie|formatMovieTitle }}, {% include 'videos/rating-with-details.html.twig' %}</p>
             </div>
         </div>

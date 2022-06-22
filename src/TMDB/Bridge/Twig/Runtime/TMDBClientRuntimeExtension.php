@@ -30,7 +30,7 @@ final class TMDBClientRuntimeExtension implements RuntimeExtensionInterface
     {
         try {
             return $this->URLGenerator->generate(
-                $this->client->findVideoForMovie($movie)
+                $this->client->findVideoForMovie($movie->id)
             );
         } catch (NotSupportedException $e) {}
 

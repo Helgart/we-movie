@@ -13,3 +13,8 @@
         {% include 'layout/pagination.html.twig' with { collection: moviesCollection } %}
     </div>
 {% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('gender') }}
+{% endblock %}

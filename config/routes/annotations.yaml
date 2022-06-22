@@ -2,6 +2,10 @@ MoviesSearch:
     resource: ../../src/Movies/Search/Actions
     type: annotation
 
+VideoSearch:
+    resource: ../../src/Videos/Actions
+    type: annotation
+
 kernel:
     resource: ../../src/Kernel.php
     type: annotation

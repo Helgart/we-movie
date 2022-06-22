@@ -26,7 +26,7 @@ final class Client
     const TMDB_API_BEST_MOVIE_CACHE_KEY = 'tmdb_best_movie';
 
     const TMDB_API_VIDEO_CACHE_TTL = '30 days';
-    const TMDB_API_VIDEO_CACHE_KEY = 'tmdb_video';
+    const TMDB_API_VIDEO_CACHE_KEY = 'tmdb_video_%s';
 
     const TMDB_API_SUPPORTED_VERSION = 3;
     const TMDB_API_SUPPORTED_LANGUAGE = 'fr-FR';
@@ -129,20 +129,18 @@ final class Client
         );
     }
 
-    public function findVideoForMovie(Movie $movie): Video
+    public function findVideoForMovie(int $movieId): Video
     {
-        $this->cache->delete(self::TMDB_API_VIDEO_CACHE_KEY);
-
         return $this
             ->cache
             ->get(
-                self::TMDB_API_VIDEO_CACHE_KEY,
-                function (ItemInterface $item) use ($movie) {
+                sprintf(self::TMDB_API_VIDEO_CACHE_KEY, $movieId),
+                function (ItemInterface $item) use ($movieId) {
                     $item->expiresAfter(\DateInterval::createFromDateString(self::TMDB_API_VIDEO_CACHE_TTL));
 
                     $videoResponse = $this
                         ->httpClient
-                        ->request(Request::METHOD_GET, sprintf(self::TMDB_API_GET_VIDEO_ENDPOINT, $movie->id))
+                        ->request(Request::METHOD_GET, sprintf(self::TMDB_API_GET_VIDEO_ENDPOINT, $movieId))
                     ;
 
                     return $this->serializer->denormalize(
