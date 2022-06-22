@@ -1,0 +1,8 @@
+{% for i in 1..5 %}
+    {% if i < (movie.voteAverage / 2) %}
+        <i class="bi bi-star-fill"></i>
+    {% else %}
+        <i class="bi bi-star"></i>
+    {% endif %}
+{% endfor %}
+{{ movie.voteAverage / 2 }} pour {{ movie.voteCount }} utilisateurs
