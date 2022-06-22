@@ -1,5 +1,5 @@
-controllers:
-    resource: ../../src/Controller/
+MoviesSearch:
+    resource: ../../src/Movies/Search/Actions
     type: annotation
 
 kernel:
