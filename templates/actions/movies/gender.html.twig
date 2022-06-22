@@ -2,8 +2,14 @@
 
 {% block body %}
     <div class="row g-4">
-        {% for movie in movies %}
+        {% include 'layout/pagination.html.twig' with { collection: moviesCollection } %}
+    </div>
+    <div class="row g-4">
+        {% for movie in moviesCollection.movies %}
             {% include 'movie/card.html.twig' %}
         {% endfor %}
+    </div>
+    <div class="row g-4">
+        {% include 'layout/pagination.html.twig' with { collection: moviesCollection } %}
     </div>
 {% endblock %}

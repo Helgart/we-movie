@@ -4,6 +4,7 @@ namespace App\TMDB;
 
 use App\TMDB\Model\Gender;
 use App\TMDB\Model\Movie;
+use App\TMDB\Model\MovieCollection;
 use App\TMDB\Model\Video;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpFoundation\Request;
@@ -96,7 +97,7 @@ final class Client
         ;
     }
 
-    public function findMovieByGender(int $genderId, int $page = 0): array
+    public function findMovieByGender(int $genderId, int $page = 1): MovieCollection
     {
         $response = $this
             ->httpClient
@@ -104,14 +105,27 @@ final class Client
                 Request::METHOD_GET,
                 self::TMDB_API_SEARCH_MOVIE_ENDPOINT,
                 [
-                    'query' => array_merge(self::DEFAULT_QUERY_PARAMETERS, [ 'with_genres' => $genderId ])
+                    'query' => array_merge(
+                        self::DEFAULT_QUERY_PARAMETERS,
+                        [
+                            'with_genres' => $genderId,
+                            'page' => $page
+                        ]
+                    )
                 ]
             )
         ;
 
-        return array_map(
-            fn ($rawMoviesCollection) => $this->serializer->denormalize($rawMoviesCollection, Movie::class),
-            $response->toArray()['results'] ?? []
+        $rawMoviesCollection = $response->toArray();
+
+        return new MovieCollection(
+            $rawMoviesCollection['page'] ?? 0,
+            $rawMoviesCollection['total_pages'] ?? 0,
+            $rawMoviesCollection['total_results'] ?? 0,
+            array_map(
+                fn ($rawMovie) => $this->serializer->denormalize($rawMovie, Movie::class),
+                $response->toArray()['results'] ?? []
+            )
         );
     }
 

@@ -1,0 +1,44 @@
+{% set route = route|default(app.request.attributes.get('_route')) %}
+{% set parameters = parameters|default(app.request.attributes.get('_route_params'))|default({}) %}
+
+{% if collection.nbPages > 1 %}
+    <nav>
+        <ul class="pagination">
+        {% if (collection.page > 1) %}
+            <li class="page-item">
+                <a class="page-link" href="{{ path(route, parameters|merge(app.request.query)|merge({'page' : 1})) }}"> << </a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="{{ path(route, parameters|merge(app.request.query)|merge({'page' : collection.page - 1})) }}"> < </a>
+            </li>
+        {% endif %}
+
+        {% set maxPages = 6 %}
+        {% set startPage = 0 %}
+        {% if collection.nbPages > maxPages %}
+            {% if collection.page > (maxPages / 2) %}
+                {% set startPage = collection.page - (maxPages / 2) %}
+            {% endif %}
+        {% endif %}
+
+        {% set currentPage = 0 %}
+        {% for i in 1..maxPages %}
+            {% if currentPage < collection.nbPages %}
+                {% set currentPage = startPage + i %}
+                <li class="page-item {% if currentPage == collection.page %} active {% endif %}">
+                    <a class="page-link" href="{{ path(route, parameters|merge(app.request.query)|merge({page: currentPage})) }}">{{ currentPage }}</a>
+                </li>
+            {% endif %}
+        {% endfor %}
+
+        {% if (collection.page < collection.nbPages) %}
+            <li class="page-item">
+                <a class="page-link" href="{{ path(route, parameters|merge(app.request.query)|merge({'page' : collection.page + 1})) }}"> > </a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="{{ path(route, parameters|merge(app.request.query)|merge({'page' : collection.nbPages})) }}"> >> </a>
+            </li>
+        {% endif %}
+        </ul>
+    </nav>
+{% endif %}
