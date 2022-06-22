@@ -1,6 +1,6 @@
 <?php
 
-namespace App\tmdb\Model;
+namespace App\TMDB\Model;
 
 final class Gender
 {

@@ -1,0 +1,5 @@
+<ul class="list-group">
+    {% for gender in tmdb_genders() %}
+    <li class="list-group-item">{{ gender.name }}</li>
+    {% endfor %}
+</ul>
