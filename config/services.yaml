@@ -18,6 +18,8 @@ services:
     _instanceof:
         App\Kernel\Actions\SingleActionControllerInterface:
             tags: ['controller.service_arguments']
+        App\Videos\Generators\URLGeneratorInterface:
+            tags: ['tmdb.video.url_generator']
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
@@ -27,6 +29,10 @@ services:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
             - '../src/Kernel.php'
+
+    App\Videos\URLGenerator:
+        arguments:
+            $generators: !tagged_iterator { tag: 'tmdb.video.url_generator' }
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

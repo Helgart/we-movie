@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>The Best Movie Ever</h1>
+    <p>According to TMDB ranking</p>
+
+    <h2>{{ movie.title }}{% if movie.title != movie.originalTitle %}<em> ({{ movie.originalTitle }})</em>{% endif %}</h2>
+    <p>{{ movie.overview }}</p>
+
+    {% include 'videos/html5_player.html.twig' with { url: tmdb_video_for_movie(movie) } %}
+{% endblock %}
