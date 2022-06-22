@@ -5,7 +5,7 @@ namespace App\TMDB\Model;
 final class Movie
 {
     public bool $adult;
-    public string $backdropPath;
+    public ?string $backdropPath = null;
     public array $genreIds;
     public int $id;
     public string $originalLanguage;

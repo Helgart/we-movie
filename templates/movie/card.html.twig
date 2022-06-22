@@ -1,0 +1,22 @@
+<div class="movie card">
+    <div class="row">
+        <div class="col-md-3">
+            <img src="{{ tmdb_image_for_movie(movie) }}" class="card-img-top" alt="{{ movie.title }}">
+        </div>
+        <div class="col-md-9">
+            <div class="card-body">
+                <h5 class="card-title">
+                    {{ movie.title }}{% if movie.title != movie.originalTitle %} <em>({{ movie.originalTitle }})</em>{% endif %}
+                    {% for i in 1..5 %}
+                        {% if i < movie.voteAverage %}
+                            <i class="bi bi-star-fill"></i>
+                        {% endif %}
+                    {% endfor %}
+                    ({{ movie.voteCount }} votes)
+                </h5>
+                <p class="card-text">{{ movie.overview }}</p>
+                <a href="#" class="btn btn-primary">Lire le détail</a>
+            </div>
+        </div>
+    </div>
+</div>

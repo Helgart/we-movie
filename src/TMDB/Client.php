@@ -29,10 +29,12 @@ final class Client
 
     const TMDB_API_SUPPORTED_VERSION = 3;
     const TMDB_API_SUPPORTED_LANGUAGE = 'fr-FR';
+    const DEFAULT_QUERY_PARAMETERS = [ 'language' => self::TMDB_API_SUPPORTED_LANGUAGE ];
 
     const TMDB_API_GENDERS_LIST_ENDPOINT = 'genre/movie/list';
     const TMDB_API_TOP_RATED_LIST_ENDPOINT = 'movie/top_rated';
     const TMDB_API_GET_VIDEO_ENDPOINT = 'movie/%s/videos';
+    const TMDB_API_SEARCH_MOVIE_ENDPOINT = 'discover/movie';
 
     private string $serviceURL;
     private string $token;
@@ -63,9 +65,7 @@ final class Client
                     'Content-Type' => 'application/json;charset=utf-8',
                     'Authorization' => sprintf('Bearer %s', $this->token)
                 ],
-                'query' => [
-                    'language' => self::TMDB_API_SUPPORTED_LANGUAGE
-                ]
+                'query' => self::DEFAULT_QUERY_PARAMETERS
             ]
         );
     }
@@ -94,6 +94,25 @@ final class Client
                 }
             )
         ;
+    }
+
+    public function findMovieByGender(int $genderId, int $page = 0): array
+    {
+        $response = $this
+            ->httpClient
+            ->request(
+                Request::METHOD_GET,
+                self::TMDB_API_SEARCH_MOVIE_ENDPOINT,
+                [
+                    'query' => array_merge(self::DEFAULT_QUERY_PARAMETERS, [ 'with_genres' => $genderId ])
+                ]
+            )
+        ;
+
+        return array_map(
+            fn ($rawMoviesCollection) => $this->serializer->denormalize($rawMoviesCollection, Movie::class),
+            $response->toArray()['results'] ?? []
+        );
     }
 
     public function findVideoForMovie(Movie $movie): Video

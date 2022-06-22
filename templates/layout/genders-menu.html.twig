@@ -1,5 +1,7 @@
 <ul class="list-group">
     {% for gender in tmdb_genders() %}
-    <li class="list-group-item">{{ gender.name }}</li>
+    <li class="list-group-item">
+        <a href="{{ path('category.movies', {genderId: gender.id}) }}">{{ gender.name }}</a>
+    </li>
     {% endfor %}
 </ul>

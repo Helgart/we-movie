@@ -5,6 +5,7 @@
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
     default_tmdb_url: 'https://api.themoviedb.org'
+    default_tmdb_poster_url: 'https://image.tmdb.org'
 
 services:
     # default configuration for services in *this* file
@@ -13,6 +14,7 @@ services:
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
         bind:
             $serviceURL: "%env(default:default_tmdb_url:TMDB_SERVICE_URL)%"
+            $posterURL: "%env(default:default_tmdb_poster_url:TMDB_POSTER_SERVICE_URL)%"
             $token: "%env(TMDB_V4_TOKEN)%"
 
     _instanceof:
