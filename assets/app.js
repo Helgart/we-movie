@@ -7,6 +7,11 @@
 
 // any CSS you import will output into a single css file (app.css in this case)
 import './styles/app.scss';
+import '@tarekraafat/autocomplete.js/dist/css/autoComplete.css'
 
 const $ = require('jquery');
 require('bootstrap');
+
+import '@tarekraafat/autocomplete.js';
+
+import './autocomplete/autocomplete';

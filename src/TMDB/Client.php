@@ -16,6 +16,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
+use TMDB\Movie\Factory\MovieCollectionFactory;
 
 final class Client
 {
@@ -24,6 +25,9 @@ final class Client
 
     const TMDB_API_BEST_MOVIE_CACHE_TTL = '30 days';
     const TMDB_API_BEST_MOVIE_CACHE_KEY = 'tmdb_best_movie';
+
+    const TMDB_API_MOVIE_CACHE_TTL = '30 days';
+    const TMDB_API_MOVIE_CACHE_KEY = 'tmdb_movie_%s';
 
     const TMDB_API_VIDEO_CACHE_TTL = '30 days';
     const TMDB_API_VIDEO_CACHE_KEY = 'tmdb_video_%s';
@@ -36,6 +40,7 @@ final class Client
     const TMDB_API_TOP_RATED_LIST_ENDPOINT = 'movie/top_rated';
     const TMDB_API_GET_VIDEO_ENDPOINT = 'movie/%s/videos';
     const TMDB_API_SEARCH_MOVIE_ENDPOINT = 'discover/movie';
+    const TMDB_API_MOVIE_ENDPOINT = 'movie/%s';
 
     private string $serviceURL;
     private string $token;
@@ -118,14 +123,67 @@ final class Client
 
         $rawMoviesCollection = $response->toArray();
 
-        return new MovieCollection(
-            $rawMoviesCollection['page'] ?? 0,
-            $rawMoviesCollection['total_pages'] ?? 0,
-            $rawMoviesCollection['total_results'] ?? 0,
+        return MovieCollectionFactory::movieCollectionFromTMDBResponse(
             array_map(
                 fn ($rawMovie) => $this->serializer->denormalize($rawMovie, Movie::class),
-                $response->toArray()['results'] ?? []
+                $rawMoviesCollection['results'] ?? []
+            ),
+            $rawMoviesCollection
+        );
+    }
+
+    public function findMovieById(int $movieId): Movie
+    {
+        $this->cache->delete(sprintf(self::TMDB_API_MOVIE_CACHE_KEY, $movieId));
+
+        return $this
+            ->cache
+            ->get(
+                sprintf(self::TMDB_API_MOVIE_CACHE_KEY, $movieId),
+                function (ItemInterface $item) use ($movieId) {
+                    $item->expiresAfter(\DateInterval::createFromDateString(self::TMDB_API_MOVIE_CACHE_TTL));
+
+                    $movieResponse = $this
+                        ->httpClient
+                        ->request(Request::METHOD_GET, sprintf(self::TMDB_API_MOVIE_ENDPOINT, $movieId))
+                    ;
+
+                    return $this->serializer->denormalize(
+                        $movieResponse->toArray() ?? [],
+                        Movie::class
+                    );
+                }
             )
+            ;
+    }
+
+    public function findMovieByQuery(string $query, int $page = 1): MovieCollection
+    {
+        $response = $this
+            ->httpClient
+            ->request(
+                Request::METHOD_GET,
+                self::TMDB_API_SEARCH_MOVIE_ENDPOINT,
+                [
+                    'query' => array_merge(
+                        self::DEFAULT_QUERY_PARAMETERS,
+                        [
+                            'with_keywords' => preg_split('/\s+/', $query),
+                            'page' => $page
+                        ]
+                    )
+                ]
+            )
+        ;
+
+        $rawMoviesCollection = $response->toArray();
+
+        return MovieCollectionFactory::movieCollectionFromTMDBResponse(
+            array_map(
+                fn ($rawMovie) => $this->serializer->denormalize($rawMovie, Movie::class),
+                $rawMoviesCollection['results'] ?? []
+            ),
+            $rawMoviesCollection
         );
     }
 
@@ -149,7 +207,7 @@ final class Client
                     );
                 }
             )
-            ;
+        ;
     }
 
     public function findBestMovie(): Movie

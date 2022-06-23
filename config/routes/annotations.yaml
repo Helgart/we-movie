@@ -2,6 +2,10 @@ MoviesSearch:
     resource: ../../src/Movies/Search/Actions
     type: annotation
 
+MoviesAPI:
+    resource: ../../src/Movies/API/Actions
+    type: annotation
+
 VideoSearch:
     resource: ../../src/Videos/Actions
     type: annotation
