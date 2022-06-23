@@ -2,6 +2,7 @@ import autoComplete from "@tarekraafat/autocomplete.js/dist/autoComplete";
 
 const autoCompleteJS = new autoComplete({
     debounce: 300,
+    submit: true,
     data: {
         src: async (query) => {
             const source = await fetch('/api/movie/search?query=' + query);
@@ -38,8 +39,13 @@ autoCompleteJS.input.addEventListener("selection", function (event) {
     autoCompleteJS.input.blur();
     autoCompleteJS.input.value = selection[feedback.selection.key];
 
-    console.log('redirect');
-    console.log('/movie/' + selection.id);
-
     window.location.href = '/movie/' + selection.id
+});
+
+document.getElementById('autoComplete').addEventListener('keypress', function (event) {
+    if (event.key === "Enter") {
+        event.preventDefault();
+
+        window.location.href = '/movie/search?query=' + event.target.value
+    }
 });

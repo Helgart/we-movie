@@ -39,7 +39,7 @@ final class Client
     const TMDB_API_GENDERS_LIST_ENDPOINT = 'genre/movie/list';
     const TMDB_API_TOP_RATED_LIST_ENDPOINT = 'movie/top_rated';
     const TMDB_API_GET_VIDEO_ENDPOINT = 'movie/%s/videos';
-    const TMDB_API_SEARCH_MOVIE_ENDPOINT = 'discover/movie';
+    const TMDB_API_SEARCH_MOVIE_ENDPOINT = 'search/movie';
     const TMDB_API_MOVIE_ENDPOINT = 'movie/%s';
 
     private string $serviceURL;
@@ -168,7 +168,7 @@ final class Client
                     'query' => array_merge(
                         self::DEFAULT_QUERY_PARAMETERS,
                         [
-                            'with_keywords' => preg_split('/\s+/', $query),
+                            'query' => $query,
                             'page' => $page
                         ]
                     )

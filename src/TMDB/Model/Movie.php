@@ -12,7 +12,7 @@ final class Movie
     public string $originalTitle;
     public string $overview;
     public ?float $popularity = null;
-    public string $posterPath;
+    public ?string $posterPath = null;
     public string $title;
     public ?bool $video = null;
     public float $voteAverage;
