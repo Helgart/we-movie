@@ -40,6 +40,7 @@ final class Client
     const TMDB_API_TOP_RATED_LIST_ENDPOINT = 'movie/top_rated';
     const TMDB_API_GET_VIDEO_ENDPOINT = 'movie/%s/videos';
     const TMDB_API_SEARCH_MOVIE_ENDPOINT = 'search/movie';
+    const TMDB_API_DISCOVER_MOVIE_ENDPOINT = 'discover/movie';
     const TMDB_API_MOVIE_ENDPOINT = 'movie/%s';
 
     private string $serviceURL;
@@ -108,7 +109,7 @@ final class Client
             ->httpClient
             ->request(
                 Request::METHOD_GET,
-                self::TMDB_API_SEARCH_MOVIE_ENDPOINT,
+                self::TMDB_API_DISCOVER_MOVIE_ENDPOINT,
                 [
                     'query' => array_merge(
                         self::DEFAULT_QUERY_PARAMETERS,
