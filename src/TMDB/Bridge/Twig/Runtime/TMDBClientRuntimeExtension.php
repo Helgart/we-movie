@@ -2,20 +2,20 @@
 
 namespace App\TMDB\Bridge\Twig\Runtime;
 
-use App\TMDB\Client;
+use App\TMDB\ClientInterface;
 use App\TMDB\Model\Movie;
 use App\Videos\Exception\NotSupportedException;
-use App\Videos\URLGenerator;
+use App\Videos\URLGeneratorInterface;
 use Twig\Extension\RuntimeExtensionInterface;
 
 final class TMDBClientRuntimeExtension implements RuntimeExtensionInterface
 {
-    private Client $client;
-    private URLGenerator $URLGenerator;
+    private ClientInterface $client;
+    private URLGeneratorInterface $URLGenerator;
 
     public function __construct(
-        Client $client,
-        URLGenerator $URLGenerator
+        ClientInterface $client,
+        URLGeneratorInterface $URLGenerator
     ) {
         $this->client = $client;
         $this->URLGenerator = $URLGenerator;

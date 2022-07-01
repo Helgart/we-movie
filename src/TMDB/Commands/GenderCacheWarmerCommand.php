@@ -2,7 +2,7 @@
 
 namespace App\TMDB\Commands;
 
-use App\TMDB\Client;
+use App\TMDB\ClientInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -10,11 +10,11 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 class GenderCacheWarmerCommand extends Command
 {
-    private Client $client;
+    private ClientInterface $client;
 
     protected static $defaultName = 'tmdb:warmup:genders';
 
-    public function __construct(Client $client, string $name = null)
+    public function __construct(ClientInterface $client, string $name = null)
     {
         parent::__construct($name);
 

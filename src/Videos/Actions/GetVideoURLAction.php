@@ -3,20 +3,20 @@
 namespace App\Videos\Actions;
 
 use App\Kernel\Actions\SingleActionControllerInterface;
-use App\TMDB\Client;
+use App\TMDB\ClientInterface;
 use App\Videos\Exception\NotSupportedException;
-use App\Videos\URLGenerator;
+use App\Videos\URLGeneratorInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
 final class GetVideoURLAction implements SingleActionControllerInterface
 {
-    private Client $client;
-    private URLGenerator $URLGenerator;
+    private ClientInterface $client;
+    private URLGeneratorInterface $URLGenerator;
 
     public function __construct(
-        Client $client,
-        URLGenerator $URLGenerator
+        ClientInterface $client,
+        URLGeneratorInterface $URLGenerator
     ) {
         $this->client = $client;
         $this->URLGenerator = $URLGenerator;

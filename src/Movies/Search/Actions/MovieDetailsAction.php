@@ -3,7 +3,7 @@
 namespace App\Movies\Search\Actions;
 
 use App\Kernel\Actions\SingleActionControllerInterface;
-use App\TMDB\Client;
+use App\TMDB\ClientInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Twig\Environment;
@@ -11,15 +11,15 @@ use Twig\Environment;
 class MovieDetailsAction implements SingleActionControllerInterface
 {
     private Environment $template;
-    private Client $client;
+    private ClientInterface $client;
 
     /**
      * @param Environment $template
-     * @param Client $client
+     * @param ClientInterface $client
      */
     public function __construct(
         Environment $template,
-        Client $client
+        ClientInterface $client
     ) {
         $this->template = $template;
         $this->client = $client;

@@ -3,19 +3,19 @@
 namespace App\Movies\API\Actions;
 
 use App\Kernel\Actions\SingleActionControllerInterface;
-use App\TMDB\Client;
+use App\TMDB\ClientInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 final class SearchForMovieAction implements SingleActionControllerInterface
 {
-    private Client $client;
+    private ClientInterface $client;
 
     /**
-     * @param Client $client
+     * @param ClientInterface $client
      */
-    public function __construct(Client $client)
+    public function __construct(ClientInterface $client)
     {
         $this->client = $client;
     }

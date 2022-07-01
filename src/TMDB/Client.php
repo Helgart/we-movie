@@ -18,7 +18,7 @@ use Symfony\Contracts\Cache\ItemInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use TMDB\Movie\Factory\MovieCollectionFactory;
 
-final class Client
+final class Client implements ClientInterface
 {
     const TMDB_API_GENDERS_CACHE_TTL = '30 days';
     const TMDB_API_GENDERS_CACHE_KEY = 'tmdb_genders';

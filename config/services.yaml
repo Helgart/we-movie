@@ -31,6 +31,9 @@ services:
             - '../src/DependencyInjection/'
             - '../src/Kernel.php'
 
+    App\TMDB\ClientInterface: '@App\TMDB\Client'
+    App\Videos\URLGeneratorInterface: '@App\Videos\URLGenerator'
+
     App\Videos\URLGenerator:
         arguments:
             $generators: !tagged_iterator { tag: 'tmdb.video.url_generator' }

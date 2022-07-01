@@ -5,7 +5,7 @@ namespace App\Videos;
 use App\TMDB\Model\Video;
 use App\Videos\Exception\NotSupportedException;
 
-final class URLGenerator
+final class URLGenerator implements URLGeneratorInterface
 {
     private array $generators = [];
 
